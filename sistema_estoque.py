@@ -34,7 +34,7 @@ def programa_estoque():
         while True:
             aviso()
             print("""            XXXXXXXXXX--MENU--XXXXXXXXXX
-                1 - Adiconar produto
+                1 - Adicionar produto
                 2 - Atualizar produto
                 3 - Listar todos os produtos
                 4 - Verificar estoque baixo
@@ -61,7 +61,7 @@ def menu(opcao):
     elif opcao == 4:
         estoque_baixo()
     elif opcao == 5:
-        print("Opção 5")
+        rel_estoque()
     else:
         print("Saindo do programa...")
         return False
@@ -97,6 +97,14 @@ def estoque_baixo():
     for nome, dados in estoque.items():
         if dados["quantidade"]< 50:
             print(f"Produto {nome} - ({dados['quantidade']} unidades) \n" )
+
+def rel_estoque():
+    print("========Relatório de Estoque =========")
+    for nome, dados in estoque.items():
+        total = dados['quantidade'] * dados['preco']
+        print(f"Produto {nome} - ({dados['quantidade']} unidades) - R$({dados['preco']} ) - Valor total R${total} ")
+
+
 
 usuario=(input("Digite seu login: "))
 senha = int(input("Digite a sua senha: "))
