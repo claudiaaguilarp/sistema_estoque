@@ -7,8 +7,8 @@ login_senha={
     "CLAUDIAAGUILAR":{"senha": 123456},
     "PATRICKSOARES":{"senha": 789456}
 }
-estoque = {"Arroz":{"quantidade": 30, "preco": 25.40, "descricao": "Arroz Camil 5kg"},
-           "Feijao":{"quantidade": 75, "preco": 9.80, "descricao": "Feijão Camil 1kg"}
+estoque = {"ARROZ":{"quantidade": 30, "preco": 25.40, "descricao": "ARROZ CAMIL 5KG"},
+           "FEIJAO":{"quantidade": 75, "preco": 9.80, "descricao": "FEIJÃO CAMIL 1KG"}
            }
 
 def validar_login(usuario, senha):
@@ -35,11 +35,10 @@ def programa_estoque():
             aviso()
             print("""            XXXXXXXXXX--MENU--XXXXXXXXXX
                 1 - Adicionar produto
-                2 - Atualizar produto
-                3 - Listar todos os produtos
-                4 - Verificar estoque baixo
-                5 - Relatório do estoque
-                6 - Sair      
+                2 - Listar todos os produtos
+                3 - Verificar estoque baixo
+                4 - Relatório do estoque
+                5 - Sair      
          """)
             opcao = int(input("Digite o número da opção desejada: "))
             if menu(opcao) == False:
@@ -55,12 +54,10 @@ def menu(opcao):
     if opcao == 1:
         cadastrar_produto()
     elif opcao == 2:
-        print("Opção 2")
-    elif opcao == 3:
         listar_produtos()
-    elif opcao == 4:
+    elif opcao == 3:
         estoque_baixo()
-    elif opcao == 5:
+    elif opcao == 4:
         rel_estoque()
     else:
         print("Saindo do programa...")
@@ -70,16 +67,23 @@ def menu(opcao):
 def cadastrar_produto():
     continuar = "S"
     while continuar == "S":
-        nome = input("Digite o nome do produto: ")
+        nome = input("Digite o nome do produto: ").upper()
         quantidade = int(input("Digite a quantidade: "))
         preco = float(input("Digite o preço: "))
-        descricao = input("Digite a descrição: ")
+        descricao = input("Digite a descrição: ").upper()
+        if nome in estoque:
+            compra = quantidade * preco
+            valor_estoque = estoque[nome]['quantidade']* estoque[nome]['preco']+compra
+            estoque[nome]['quantidade'] += quantidade
+            estoque[nome]['preco'] =valor_estoque/(estoque[nome]['quantidade'])
+            estoque[nome]['descricao']= descricao
+        else:
+            estoque[nome]={
+                "quantidade": quantidade,
+                "preco": preco,
+                "descricao": descricao
+            }
 
-        estoque[nome]={
-            "quantidade": quantidade,
-            "preco": preco,
-            "descricao": descricao
-        }
         continuar = input("Produto cadastrado com sucesso, se deseja cadastrar outro produto digite (S/N): ").upper()
 
 def listar_produtos():
@@ -88,7 +92,7 @@ def listar_produtos():
     else:
         print("\n--- Estoque ---")
         for nome, dados in estoque.items():
-            print(f" Produto: {nome} - {dados['quantidade']} unidades - R${dados['preco']} - {dados['descricao']}")
+            print(f" Produto: {nome} - {dados['quantidade']} unidades - R${dados['preco']:.2f} - {dados['descricao']}")
 
 
 def estoque_baixo():
@@ -102,7 +106,7 @@ def rel_estoque():
     print("========Relatório de Estoque =========")
     for nome, dados in estoque.items():
         total = dados['quantidade'] * dados['preco']
-        print(f"Produto {nome} - ({dados['quantidade']} unidades) - R$({dados['preco']} ) - Valor total R${total} ")
+        print(f"Produto {nome} - ({dados['quantidade']} unidades) - R$({dados['preco']:.2f} ) - Valor total R${total:.2f} ")
 
 
 
